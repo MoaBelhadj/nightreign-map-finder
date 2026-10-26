@@ -1,0 +1,28 @@
+<pre id="calls" style="white-space:pre-wrap"></pre>
+<script>
+// Test driver: pick a team, load a "screenshot", run Find, and write progress plus every prompt sent to Claude into #calls.
+const log = [];
+const out = () => {
+  document.getElementById("calls").textContent = log.join("\n") + "\n" +
+    (window.__calls || []).map(c => `--- tier=${c.tier} images=${c.images}\n${c.input}`).join("\n") +
+    "\nSTATUS: " + document.getElementById("status").textContent;
+};
+const note = m => { log.push(m); out(); };
+addEventListener("error", e => note("error: " + e.message));
+addEventListener("unhandledrejection", e => note("rejection: " + JSON.stringify(e.reason)));
+(async () => {
+  try {
+    for (const n of ["Recluse", "Ironeye", "Executor"]) { const b = document.getElementById("team-" + n.toLowerCase()); if (!b.checked) b.click(); }
+    note("start");
+    const blob = await fetch("sprites/gladius.jpg").then(r => r.blob());
+    note("blob " + blob.size);
+    setFile(new File([blob], "shot.jpg", { type: "image/jpeg" }));
+    for (let i = 0; i < 20 && !sample; i++) await new Promise(r => setTimeout(r, 250));
+    note("sample=" + !!sample + " DATA=" + !!DATA);
+    const t = setInterval(out, 200);
+    await find();
+    clearInterval(t);
+    note("find done; route=" + !!state.route);
+  } catch (e) { note("driver: " + e); }
+})();
+</script>

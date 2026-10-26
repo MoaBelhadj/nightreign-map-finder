@@ -1,0 +1,43 @@
+<script>
+// Test stand-in for the viewer's Claude: canned answers, and every prompt recorded into #prompts.
+const ROUTE = {
+  summary: "Clear the south-west on Day 1, then sweep north-east along the cliffs on Day 2.",
+  goals: ["Level 8, three flask charges, a holy weapon.", "Level 13 and upgraded weapons."],
+  day1: [
+    { key: "L23", why: "Spawn camp, quick runes.", for: [] },
+    { key: "L18", why: "Unlit Candle rise for a staff.", for: ["Recluse", "Nobody"] },
+    { key: "L99", why: "Invalid key, must be dropped.", for: [] },
+    { key: "L2", why: "Perfumer ruins chest.", for: ["Ironeye"] },
+    { key: "L28", why: "Nox Warriors evergaol.", for: ["Executor"] },
+    { key: "L4", why: "Frenzied Flame Troll camp.", for: [] },
+    { key: "L21", why: "Church flask charge next to the circle.", for: [] }
+  ],
+  day2: [
+    { key: "L6", why: "Guardian Golem fort.", for: ["Executor"] },
+    { key: "L7", why: "Great church flask and loot.", for: [] },
+    { key: "L27", why: "Fog Door rise.", for: ["Recluse"] },
+    { key: "L15", why: "Royal Army Knights camp.", for: ["Ironeye"] },
+    { key: "L16", why: "Great church before the circle.", for: [] }
+  ],
+  team: [
+    { name: "Recluse", focus: "Staffs and seals; collect residues.", keys: ["L18", "L27"] },
+    { name: "Ironeye", focus: "Bows from camps.", keys: ["L2", "L15", "L77"] }
+  ],
+  nights: ["Bait the Queen's magic.", "Kill the cavalry first.", "Stay mobile against Gladius."],
+  warnings: ["Day 2 Night Horde."]
+};
+const mock = Object.assign(async () => ({ text: "" }), {
+  limits: async () => ({ maxPromptBytes: 262144, images: { maxCount: 20, maxInputBytes: 2e7, mediaTypes: ["image/jpeg", "image/png"] } }),
+  json: async (input, opts) => {
+    (window.__calls ??= []).push({ input, images: opts.images?.length || 0, tier: opts.modelTier });
+    if (/Shifting Earth variant/.test(input)) return { isMap: true, terrain: "none" };
+    if (/Identify which/.test(input)) return { best: location.hash === "#dlc" ? "1003" : "#000", confidence: "high", runnersUp: ["005", "1003", "999"], reason: "Fort in the north-west matches." };
+    if (/Detailed location data is not available/.test(input)) return { ...ROUTE,
+      day1: [{ place: "the church just west of the spawn", why: "Flask charge.", for: [] }, { place: "the fort in the north-west", why: "Runes.", for: ["Executor"] }],
+      day2: [{ place: "the great church in the north", why: "Loot.", for: ["Recluse"] }],
+      team: [{ name: "Recluse", focus: "Staffs.", places: ["the rise by the lake"] }] };
+    return ROUTE;
+  },
+});
+window.claude = { use: async n => n === "sample" ? mock : null };
+</script>

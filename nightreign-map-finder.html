@@ -39,13 +39,15 @@ legend { padding: 0; margin-bottom: 10px; }
 .chip small { display: block; color: var(--muted); font-size: 12px; }
 .chip input:checked + span { border-color: var(--gold); background: var(--raised); box-shadow: inset 0 0 0 1px var(--gold); }
 .chip input:focus-visible + span { outline: 2px solid var(--tide); outline-offset: 2px; }
+.chip input:disabled + span { opacity: .45; }
+.legend-note { text-transform: none; letter-spacing: 0; }
 
 .drop { position: relative; display: grid; place-items: center; gap: 6px; min-height: 230px; padding: 20px; text-align: center; color: var(--muted);
   border: 1.5px dashed var(--tide); border-radius: 10px; background: var(--panel); cursor: pointer; }
 .drop.over { background: var(--raised); border-style: solid; }
 .drop:focus-within { outline: 2px solid var(--tide); outline-offset: 2px; }
 .drop strong { color: var(--ink); font-weight: 500; }
-.drop img { max-height: 260px; border-radius: 6px; }
+.drop img { max-height: 260px; max-width: 100%; border-radius: 6px; }
 .drop input { position: absolute; width: 1px; height: 1px; opacity: 0; }
 .actions { display: flex; flex-wrap: wrap; gap: 10px; align-items: center; margin-top: 14px; }
 button { font: inherit; font-weight: 700; border-radius: 6px; padding: 10px 18px; cursor: pointer; border: 1px solid var(--gold); }
@@ -72,7 +74,7 @@ dd { margin: 0; }
 .reason { color: var(--muted); margin: 0 0 16px; }
 .btn { display: inline-block; background: var(--gold); color: var(--gold-ink); font-weight: 700; padding: 10px 16px; border-radius: 6px; text-decoration: none; }
 .yours { margin: 0; }
-.yours img { display: block; border-radius: 8px; border: 1px solid var(--line); }
+.yours img { display: block; max-width: 100%; border-radius: 8px; border: 1px solid var(--line); }
 figcaption { color: var(--muted); font-size: 14px; margin-top: 6px; }
 .also { margin-top: 22px; display: grid; gap: 10px; }
 
@@ -91,6 +93,54 @@ figcaption { color: var(--muted); font-size: 14px; margin-top: 6px; }
 .is-close { border-color: var(--tide); }
 .badge { position: absolute; top: 6px; left: 6px; padding: 2px 7px; border-radius: 4px; font-size: 12px; font-weight: 700; background: var(--gold); color: var(--gold-ink); }
 .is-close .badge { background: var(--tide); }
+#plan { background: transparent; color: var(--ink); }
+#plan:disabled { opacity: .45; cursor: not-allowed; }
+#route { margin-top: 24px; padding: 20px; border: 1px solid var(--line); border-radius: 12px; background: var(--panel); }
+#route h2 { font: 400 30px/1.15 var(--display); margin: 8px 0; text-wrap: balance; }
+.summary { color: var(--muted); margin: 0 0 20px; max-width: 70ch; }
+.route-grid { display: grid; grid-template-columns: minmax(0, 520px) minmax(0, 1fr); gap: 28px; align-items: start; }
+@media (max-width: 900px) { .route-grid { grid-template-columns: minmax(0, 1fr); } }
+.route-map { margin: 0; max-width: 520px; }
+.map-box { position: relative; border-radius: 8px; overflow: hidden; border: 1px solid var(--line); }
+.map-box svg { position: absolute; inset: 0; width: 100%; height: 100%; }
+.case { stroke: var(--night); stroke-width: 1.9; stroke-linecap: round; opacity: .75; }
+.leg { stroke-width: .9; stroke-linecap: round; }
+.leg.d1 { stroke: var(--gold); }
+.leg.d2 { stroke: var(--tide); }
+.tip.d1 { fill: var(--gold); }
+.tip.d2 { fill: var(--tide); }
+.pin circle { stroke: var(--night); stroke-width: .6; }
+.pin.d1 circle { fill: var(--gold); }
+.pin.d2 circle { fill: var(--tide); }
+.pin text { font: 700 3.2px var(--body); fill: var(--gold-ink); text-anchor: middle; dominant-baseline: central; }
+.goal { margin: -4px 0 12px; color: var(--ink); font-size: 15px; }
+.ring { fill: none; stroke: var(--bad); stroke-width: .7; stroke-dasharray: 1.2 .8; }
+.ring-label { font: 700 2.8px var(--body); fill: var(--ink); text-anchor: middle; paint-order: stroke; stroke: var(--night); stroke-width: .9; }
+.spawn { fill: var(--good); stroke: var(--night); stroke-width: .5; }
+.legend { display: flex; flex-wrap: wrap; gap: 6px 16px; color: var(--muted); font-size: 14px; margin-top: 8px; }
+.key::before { content: ""; display: inline-block; width: 10px; height: 10px; border-radius: 50%; margin-right: 6px; vertical-align: -1px; background: var(--c); }
+.days h3 { font: 400 22px/1.2 var(--display); margin: 0 0 10px; color: var(--gold); }
+.days h3.d2 { color: var(--tide); }
+.stops { list-style: none; margin: 0 0 14px; padding: 0; display: grid; gap: 12px; }
+.stops li { display: grid; grid-template-columns: 28px minmax(0, 1fr); gap: 2px 10px; align-items: start; }
+.num { grid-row: span 3; width: 26px; height: 26px; border-radius: 50%; display: grid; place-items: center; font-weight: 700; font-size: 14px; background: var(--gold); color: var(--gold-ink); font-variant-numeric: tabular-nums; }
+.stops.d2 .num { background: var(--tide); }
+.stop-name { font-weight: 500; }
+.where { color: var(--muted); font-weight: 400; font-size: 14px; }
+.why { margin: 0; color: var(--muted); font-size: 15px; }
+.who { display: flex; flex-wrap: wrap; gap: 4px; }
+.who span { font-size: 12px; padding: 1px 8px; border-radius: 99px; border: 1px solid var(--line); }
+.night { margin: 0 0 22px; padding: 10px 12px; background: var(--raised); border-radius: 8px; font-size: 15px; }
+.night .eyebrow { color: var(--bad); }
+.night b { display: block; margin-top: 2px; }
+.night p { margin: 4px 0 0; color: var(--muted); }
+.team-cards { display: grid; grid-template-columns: repeat(auto-fill, minmax(240px, 1fr)); gap: 14px; margin-top: 26px; }
+.team-card { padding: 14px; border: 1px solid var(--line); border-radius: 10px; background: var(--raised); min-width: 0; }
+.team-card h4 { font: 400 21px/1.2 var(--display); margin: 0 0 6px; color: var(--gold); }
+.team-card p { margin: 0 0 8px; color: var(--muted); font-size: 15px; }
+.team-card ul { margin: 0; padding-left: 18px; font-size: 15px; }
+.warnings { margin: 20px 0 0; padding-left: 18px; color: var(--warn); }
+.fine { color: var(--muted); font-size: 13px; margin: 16px 0 0; }
 footer { margin-top: 48px; padding-top: 16px; border-top: 1px solid var(--line); color: var(--muted); font-size: 14px; }
 footer p { margin: 0 0 6px; max-width: 80ch; }
 footer a { color: var(--tide); }
@@ -100,13 +150,14 @@ footer a { color: var(--tide); }
 <div class="wrap">
   <header>
     <h1>Nightreign Map Finder</h1>
-    <p class="lede">Screenshot your map at the start of an expedition and drop it here. Claude matches it against all 520 map patterns and links you to the full annotated map.</p>
+    <p class="lede">Screenshot your map at the start of an expedition and drop it here. Claude matches it against all 520 map patterns, links you to the full annotated map, and plans a route for your team.</p>
   </header>
 
   <div class="controls">
     <div class="pickers">
       <fieldset><legend>Nightlord</legend><div class="chips" id="lords"></div></fieldset>
       <fieldset><legend>Shifting Earth</legend><div class="chips" id="terrains"></div></fieldset>
+      <fieldset><legend>Your team <span class="legend-note">(up to 3, for the route)</span></legend><div class="chips" id="team"></div></fieldset>
     </div>
     <div>
       <label class="drop" id="drop" for="file">
@@ -124,6 +175,7 @@ footer a { color: var(--tide); }
   </div>
 
   <section id="result" hidden aria-live="polite"></section>
+  <section id="route" hidden aria-live="polite"></section>
 
   <section class="patterns">
     <h2 id="grid-title">Map patterns</h2>
@@ -133,6 +185,7 @@ footer a { color: var(--tide); }
 
   <footer>
     <p>Map patterns, thumbnails and full maps by thefifthmatt: <a href="https://thefifthmatt.github.io/nightreign/" target="_blank" rel="noopener">thefifthmatt.github.io/nightreign</a> (updated for app ver 1.03.2).</p>
+    <p>Route data for patterns 000–319 comes from thefifthmatt's pattern spreadsheet (game version 1.01.3). DLC and Depth of Night patterns (1000+) are planned from your screenshot alone.</p>
     <p>A pattern fixes the structures, bosses and Shifting Earth. The first circle, merchant shops and scarabs still vary per expedition.</p>
   </footer>
 </div>
@@ -147,9 +200,12 @@ const $ = s => document.querySelector(s);
 const esc = s => String(s).replace(/[&<>"]/g, c => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" })[c]);
 const lordName = slug => LORDS.find(l => l[0] === slug)[1];
 
+const NIGHTFARERS = ["Wylder", "Guardian", "Ironeye", "Duchess", "Raider", "Revenant", "Recluse", "Executor", "Scholar", "Undertaker"];
+
 let DATA = null, sample = null, maxImages = 0, noClaude = false, busy = false, ctl = null, shotURL = null;
-const state = { lord: "gladius", terrain: "auto", detected: null, file: null, result: null };
+const state = { lord: "gladius", terrain: "auto", detected: null, file: null, result: null, team: [], route: null };
 try { const l = localStorage.getItem("nmf.lord"); if (LORDS.some(x => x[0] === l)) state.lord = l; } catch {}
+try { state.team = JSON.parse(localStorage.getItem("nmf.team") || "[]").filter(n => NIGHTFARERS.includes(n)).slice(0, 3); } catch {}
 
 const rowCache = {};
 const rows = lord => rowCache[lord] ??= DATA[lord].map(([id, terrain, spawn], idx) => ({ id, terrain, spawn, idx }));
@@ -174,6 +230,13 @@ $("#lords").addEventListener("change", e => {
   render();
 });
 $("#terrains").addEventListener("change", e => { state.terrain = e.target.value; state.result = null; render(); });
+$("#team").innerHTML = NIGHTFARERS.map(n =>
+  `<label class="chip"><input type="checkbox" name="team" id="team-${n.toLowerCase()}" value="${n}"${state.team.includes(n) ? " checked" : ""}><span>${n}</span></label>`).join("");
+$("#team").addEventListener("change", () => {
+  state.team = [...document.querySelectorAll("#team input:checked")].map(i => i.value);
+  try { localStorage.setItem("nmf.team", JSON.stringify(state.team)); } catch {}
+  render();
+});
 
 function setFile(f) {
   if (!f || !f.type.startsWith("image/")) return status("That file isn't an image. Use a PNG or JPEG screenshot.", true);
@@ -252,6 +315,8 @@ function errorText(e) {
     session_expired: "Your Claude session expired. Sign in again, then try again.",
     not_granted: "Matching needs your permission to use Claude. Reload the page and allow it.",
     invalid_json: unsure, empty_completion: unsure, refused: unsure,
+    details: "The route data didn't load. Reload the page and try again.",
+    route_json: "Claude's route came back incomplete. Press Plan route to try again.",
   };
   if (known[e?.code]) return known[e.code];
   if (GATED.includes(e?.code)) return "Claude isn't available on this page, so matching is off. You can still browse the patterns below.";
@@ -288,22 +353,224 @@ async function find() {
     const close = [...new Set((Array.isArray(a.runnersUp) ? a.runnersUp : []).map(pick))].filter(p => p && p !== best).slice(0, 2);
     const confidence = ["high", "medium", "low"].includes(a.confidence) ? a.confidence : "low";
     state.result = { lord, best, close, confidence, reason: String(a.reason || "") };
+    if (state.team.length) { render(); await plan(signal); }
     status("");
   } catch (e) {
-    status(errorText(e), e?.code !== "cancelled");
-    if (GATED.includes(e?.code)) { sample = null; noClaude = true; }
+    fail(e);
   } finally {
     busy = false; ctl = null; render();
     if (state.result) $("#result").scrollIntoView({ block: "nearest" });
   }
 }
 $("#find").addEventListener("click", find);
+
+function fail(e) {
+  status(errorText(e), e?.code !== "cancelled");
+  if (GATED.includes(e?.code)) { sample = null; noClaude = true; }
+}
+
+// Route planning: patterns 000-319 have full location data (details.json); the rest are planned from the images.
+let detailsP = null;
+const details = () => detailsP ??= fetch("details.json").then(r => r.ok ? r.json() : Promise.reject())
+  .catch(() => { detailsP = null; throw { code: "details" }; });
+const xy = p => `${Math.round(p[0])},${Math.round(p[1])}`;
+const area = (x, y) => { const ns = y < 38 ? "north" : y > 62 ? "south" : "", ew = x < 38 ? "west" : x > 62 ? "east" : ""; return ns && ew ? `${ns}-${ew}` : ns || ew || "center"; };
+const keyIndex = (k, places) => { const m = /^L(\d+)$/i.exec(String(k ?? "").trim()); return m && places.has(+m[1]) ? +m[1] : null; };
+
+// Primary Nightlord weaknesses and loot affinities by location enemy, as listed by community guides (Shacknews, EIP).
+const WEAK = { gladius: "holy", adel: "poison", gnoster: "fire", maris: "lightning", libra: "madness", fulghor: "lightning", caligo: "fire", heolstor: "holy" };
+const AFFINITY = { "Flame Chariots": "fire", "Redmane Knights": "fire", "Frenzied Flame Troll": "madness", "Fire Monk": "fire", "Oracle Envoys": "holy", "Crystalians": "magic", "Albinauric Archers": "frostbite", "Albinaurics": "holy", "Battlemages": "magic", "Runebear": "sleep" };
+const weakLine = lord => WEAK[lord] ? `\nThe Nightlord is weak to ${WEAK[lord]}: weapons of that type are a top pickup for anyone who can use them.` : "";
+
+// Coaching rules distilled from community route guides (Fextralife, Icy Veins, Deltia's Gaming, PCGamesN, Anime News Network).
+const HOW = `How a run works: on Day 1 and Day 2 the Night's Rain closes in on that day's circle, where the night boss waits; Day 3 is the Nightlord. Runes level the team up to level 15.
+
+What a strong run looks like:
+- Opener: clear the small camp nearest the spawn and level up at the closest Site of Grace right away.
+- Day 1 priorities: churches (each adds one flask charge and takes seconds; only churches do this, great churches do not) and weapons of the type the Nightlord is weak to, from ruins, encampments and great churches. Casters need a staff or seal early. Go straight to each location's boss and skip ordinary enemies.
+- Leave for Day 2: the castle (too strong on Day 1; big runes, a talisman chest and a Stonesword Key; clear it early on Day 2), field bosses that are off the path, and the Shifting Earth zone (worth it from about level 10).
+- Level targets: about 7 to 9 by Night 1, 12 to 13 or more by Night 2.
+- Day 2: grab any churches missed on Day 1 first, then the castle or the strongest bases, then weapon upgrades: tunnels (the troll boss drops smithing stones), smithing tables at main encampments, township merchants. Never take an un-upgraded or wrong-element weapon into the Nightlord.
+- Stonesword Keys (forts, great churches, the castle, and small caravan camps often have one) open evergaols: 10,000 to 20,000 runes plus a strong passive. Pair a key source with a nearby evergaol.
+- Sorcerer's Rises: break the hidden crest to open the top floor; staves, talismans and sorcery-leaning rewards, worth a short detour for casters.
+- What each base suits: forts have a staff rack and a Stonesword Key; great churches have a sacred seal altar; main encampments have a bow rack, smithing table and merchant; ruins hide an underground chest.
+- A cleared place gives nothing on a second visit, so never repeat a stop. Spectral hawk trees and spiritstreams cross the map fast.
+- End each day with the last stop inside or right beside that day's circle.
+- Shifting Earth zones are Day 2 targets: the Crater's Magma Wyrm unlocks a table that maxes one weapon; the Mountaintop's Ice Dragon gives a strong reward and frost resistance; the Rotted Woods blessing gives rot immunity and more HP; Noklateo's Astel grants one revive.
+
+Nightfarers and what they want:
+Wylder: strength and dexterity all-rounder; greatswords and most melee weapons.
+Guardian: strength tank; halberds and greatshields.
+Ironeye: dexterity; bows (main encampment bow racks).
+Duchess: dexterity and intelligence; daggers, and staves for sorcery.
+Raider: strength; colossal weapons, greataxes and great hammers.
+Revenant: faith summoner; sacred seals and incantations (great church seal altars).
+Recluse: intelligence and faith caster; staves and seals (fort staff racks, Sorcerer's Rises, great church altars).
+Executor: dexterity and arcane; katanas and bleed.
+Scholar: arcane support; thrusting swords.
+Undertaker: reportedly strength and faith.
+
+Use these rules plus what you know about each enemy. Keep advice general where you are unsure, and never invent locations.`;
+const SHAPE = (stop, items) => `Reply with only JSON:
+{"summary": "<two sentences on the plan>",
+ "goals": ["<Day 1 goal: target level and key pickups, under 15 words>", "<Day 2 goal, under 15 words>"],
+ "day1": [{${stop}, "why": "<under 20 words>", "for": ["<team member>"]}],
+ "day2": [the same shape],
+ "team": [{"name": "<team member>", "focus": "<under 25 words on what to look for>", ${items}}],
+ "nights": ["<Night 1 boss tip>", "<Night 2 boss tip>", "<Nightlord tip>"],
+ "warnings": ["<short warning>"]}
+Give 4 to 7 stops per day in travel order: Day 1 starts at the spawn, Day 2 starts at the Day 1 circle. Leave "for" empty when a stop helps everyone. Give one "team" entry per team member.`;
+
+function routePrompt(lord, terrain, team, d, det, places) {
+  const own = ["mountaintop", "crater", "noklateo"].includes(terrain);
+  return `You are an expert Elden Ring Nightreign coach. Plan the best route for this expedition and tailor it to the team.
+
+Expedition: Nightlord ${lordName(lord)}. Shifting Earth: ${TERRAINS[terrain]}. Special event: ${d.event || "none"}.${d.extra ? ` Extra night boss: ${d.extra}.` : ""}${weakLine(lord)}
+Team: ${team.join(", ")}.
+Spawn: ${xy(det.spawns[d.spawn])}.
+Night 1 boss: ${d.n1[0]}. The Day 1 circle closes at ${xy(det.circles[d.n1[1]])}.
+Night 2 boss: ${d.n2[0]}. The Day 2 circle closes at ${xy(det.circles[d.n2[1]])}.${d.merchant ? `\nScale-Bearing Merchant: ${d.merchant}.` : ""}${d.frenzy ? `\nFrenzy Tower: ${d.frenzy} part of the map.` : ""}${d.blessing ? `\nRot blessing: ${d.blessing} part of the Rotted Woods.` : ""}${own ? `\nThe ${TERRAINS[terrain]} area has its own bosses and loot that are not listed below. Mention it in "summary" or "team" if it suits the team, but do not use it as a stop.` : ""}
+
+Coordinates: x runs from 0 (west) to 100 (east), y from 0 (north) to 100 (south); the island spans roughly 15 to 85 on both.
+
+Locations (key | what is there | x,y), with the loot element where the enemies give it away:
+${[...places].map(([i, p]) => `L${i} | ${p.raw}${p.aff ? ` (loot leans ${p.aff})` : ""} | ${xy([p.x, p.y])}`).join("\n")}
+
+${HOW}
+
+${SHAPE(`"key": "<location key>"`, `"keys": ["<location key>"]`)}`;
+}
+
+const routePromptNoData = (lord, terrain, team, b) => `You are an expert Elden Ring Nightreign coach. Plan the best route for this expedition and tailor it to the team.
+
+Expedition: Nightlord ${lordName(lord)}. Shifting Earth: ${TERRAINS[terrain]}. Map pattern #${b.id}; the players spawn near "${b.spawn}".${weakLine(lord)}
+Team: ${team.join(", ")}.
+Detailed location data is not available for this pattern. The first image is the player's in-game map. The second is thefifthmatt's annotated map of the same pattern: its small labels name bosses and enemies, and the circles numbered 1 and 2 mark where the Day 1 and Day 2 night bosses wait. Work out the structures and their positions from the images.
+
+${HOW}
+
+${SHAPE(`"place": "<the structure and where it is, e.g. the fort in the north-west>"`, `"places": ["<short place>"]`)}`;
+
+async function plan(signal) {
+  const { lord, best: b } = state.result, team = [...state.team];
+  status(`Planning a route for ${team.join(", ")}. This can take a minute.`);
+  const det = await details(), d = det.patterns[b.id];
+  const places = new Map();
+  let input, images;
+  if (d) {
+    d.v.forEach((vi, i) => {
+      if (!vi) return;
+      const s = det.slots[i], raw = s.kind ? `${s.kind} - ${det.values[vi]}` : det.values[vi];
+      const aff = s.kind ? "" : AFFINITY[raw.split(" - ")[1]] || ""; // bases only: evergaol/field boss names say nothing about loot
+      places.set(i, { raw, aff, label: raw.replace(" - Normal", "").replace(" - ", " · "), x: s.x, y: s.y });
+    });
+    input = routePrompt(lord, b.terrain, team, d, det, places);
+  } else {
+    images = [await shotJpeg(state.file), await makeSheet(lord, [{ idx: b.idx, label: "#" + b.id }])];
+    input = routePromptNoData(lord, b.terrain, team, b);
+  }
+  const a = await sample.json(input, { modelTier: "complex", signal, ...(images && { images }) })
+    .catch(e => { throw ["invalid_json", "empty_completion"].includes(e?.code) ? { code: "route_json" } : e; });
+  const label = k => { const i = keyIndex(k, places); return i != null ? places.get(i) : null; };
+  const stops = list => (Array.isArray(list) ? list : []).map(s => {
+    const p = label(s?.key), name = p ? p.label : String(s?.place || "").trim();
+    return name && { name, where: p ? area(p.x, p.y) : "", x: p?.x, y: p?.y, why: String(s?.why || ""),
+      for: (Array.isArray(s?.for) ? s.for : []).filter(n => team.includes(n)) };
+  }).filter(Boolean).slice(0, 8);
+  const day1 = stops(a?.day1), day2 = stops(a?.day2);
+  if (!day1.length && !day2.length) throw { code: "route_json" };
+  const cards = team.map(name => {
+    const t = (Array.isArray(a.team) ? a.team : []).find(t => t?.name === name) || {};
+    const items = [...(Array.isArray(t.keys) ? t.keys : []), ...(Array.isArray(t.places) ? t.places : [])]
+      .map(k => label(k)?.label || (/^L\d+$/i.test(String(k).trim()) ? "" : String(k))).filter(Boolean);
+    return { name, focus: String(t.focus || ""), items };
+  });
+  const nights = Array.isArray(a.nights) ? a.nights.map(String) : [];
+  state.route = {
+    lord, pid: b.id, idx: b.idx, team, day1, day2, cards, nights,
+    goals: Array.isArray(a.goals) ? a.goals.map(String) : [],
+    summary: String(a.summary || ""),
+    warnings: (Array.isArray(a.warnings) ? a.warnings : []).map(String).filter(Boolean).slice(0, 5),
+    bosses: [d?.n1[0] || "Night 1 boss", d?.n2[0] || "Night 2 boss", lordName(lord)],
+    map: d && { spawn: det.spawns[d.spawn], n1: det.circles[d.n1[1]], n2: det.circles[d.n2[1]] },
+  };
+}
+
+async function runPlan() {
+  ctl = new AbortController(); busy = true; render();
+  try { await plan(ctl.signal); status(""); }
+  catch (e) { fail(e); }
+  finally {
+    busy = false; ctl = null; render();
+    if (state.route) $("#route").scrollIntoView({ block: "nearest" });
+  }
+}
+$("#result").addEventListener("click", e => { if (e.target.id === "plan") runPlan(); });
+
+// Route map: spawn -> numbered Day 1 stops -> Night 1 circle -> numbered Day 2 stops -> Night 2 circle, one arrow per leg.
+function mapHTML(rt) {
+  const m = rt.map, PIN = 2.8, RING = 5, legs = [], pins = [];
+  let n = 0;
+  const walk = (from, list, to, day) => {
+    let prev = from;
+    for (const s of list) {
+      n++;
+      if (s.x == null) continue;
+      const here = { p: [s.x, s.y], r: PIN };
+      legs.push([prev, here, day]);
+      pins.push(`<g class="pin ${day}"><circle cx="${s.x}" cy="${s.y}" r="${PIN}"/><text x="${s.x}" y="${s.y}">${n}</text></g>`);
+      prev = here;
+    }
+    legs.push([prev, { p: to, r: RING }, day]);
+  };
+  walk({ p: m.spawn, r: 2 }, rt.day1, m.n1, "d1");
+  walk({ p: m.n1, r: RING }, rt.day2, m.n2, "d2");
+  // Each leg runs from the edge of one marker to the edge of the next, so the arrowhead lands on the stop it points at.
+  const leg = ([a, b, day]) => {
+    const dx = b.p[0] - a.p[0], dy = b.p[1] - a.p[1], len = Math.hypot(dx, dy);
+    if (len <= a.r + b.r + 1.5) return "";
+    const ux = dx / len, uy = dy / len, f = v => v.toFixed(2);
+    const pts = `x1="${f(a.p[0] + ux * a.r)}" y1="${f(a.p[1] + uy * a.r)}" x2="${f(b.p[0] - ux * (b.r + .5))}" y2="${f(b.p[1] - uy * (b.r + .5))}"`;
+    return `<line class="case" ${pts}/><line class="leg ${day}" ${pts} marker-end="url(#tip-${day})"/>`;
+  };
+  const ring = (c, text) => `<circle class="ring" cx="${c[0]}" cy="${c[1]}" r="${RING}"/><text class="ring-label" x="${c[0]}" y="${c[1] - RING - 1}">${text}</text>`;
+  const tip = day => `<marker id="tip-${day}" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="4.5" markerHeight="4.5" orient="auto"><path class="tip ${day}" d="M0 0L10 5L0 10z"/></marker>`;
+  return `<figure class="route-map"><div class="map-box"><span class="thumb" style="${thumbStyle(rt.lord, rt.idx)}"></span>
+    <svg viewBox="0 0 100 100" role="img" aria-label="Route map: numbered stops in order, arrows point to the next stop">
+      <defs>${tip("d1")}${tip("d2")}</defs>
+      ${legs.map(leg).join("")}
+      ${ring(m.n1, "Night 1")}${ring(m.n2, "Night 2")}
+      <path class="spawn" d="M${m.spawn[0]} ${m.spawn[1] - 2.8}l2.6 4.4h-5.2z"/><text class="ring-label" x="${m.spawn[0]}" y="${m.spawn[1] + 5}">Start</text>
+      ${pins.join("")}
+    </svg></div>
+    <figcaption class="legend"><span class="key" style="--c:var(--good)">Start</span><span class="key" style="--c:var(--gold)">Day 1 stops</span><span class="key" style="--c:var(--tide)">Day 2 stops</span><span class="key" style="--c:var(--bad)">Night boss circles</span></figcaption></figure>`;
+}
+
+function routeHTML(rt) {
+  let n = 0;
+  const li = s => `<li><span class="num">${++n}</span><span class="stop-name">${esc(s.name)}${s.where ? ` <span class="where">${s.where}</span>` : ""}</span>${s.why ? `<p class="why">${esc(s.why)}</p>` : ""}${s.for.length ? `<span class="who">${s.for.map(f => `<span>${esc(f)}</span>`).join("")}</span>` : ""}</li>`;
+  const goal = i => rt.goals[i] ? `<p class="goal">Goal: ${esc(rt.goals[i])}</p>` : "";
+  const night = i => `<div class="night"><span class="eyebrow">${i < 2 ? `Night ${i + 1}` : "Day 3 · Nightlord"}</span><b>${esc(rt.bosses[i])}</b>${rt.nights[i] ? `<p>${esc(rt.nights[i])}</p>` : ""}</div>`;
+  return `<p class="eyebrow">Route for pattern #${rt.pid}</p>
+    <h2>Plan for ${esc(rt.team.join(", "))}</h2>
+    ${rt.summary ? `<p class="summary">${esc(rt.summary)}</p>` : ""}
+    <div class="route-grid">${rt.map ? mapHTML(rt) : ""}
+      <div class="days">
+        <h3>Day 1</h3>${goal(0)}<ol class="stops">${rt.day1.map(li).join("")}</ol>${night(0)}
+        <h3 class="d2">Day 2</h3>${goal(1)}<ol class="stops d2">${rt.day2.map(li).join("")}</ol>${night(1)}${night(2)}
+      </div>
+    </div>
+    <div class="team-cards">${rt.cards.map(c => `<div class="team-card"><h4>${esc(c.name)}</h4>${c.focus ? `<p>${esc(c.focus)}</p>` : ""}${c.items.length ? `<ul>${c.items.map(i => `<li>${esc(i)}</li>`).join("")}</ul>` : ""}</div>`).join("")}</div>
+    ${rt.warnings.length ? `<ul class="warnings">${rt.warnings.map(w => `<li>${esc(w)}</li>`).join("")}</ul>` : ""}
+    <p class="fine">${rt.map ? "Locations come from thefifthmatt's pattern spreadsheet." : "This pattern has no location data yet, so the plan is read from your screenshot and the map thumbnail. Treat the places as rough."} Routes are Claude's suggestions: check the full map before you commit.</p>`;
+}
 $("#stop").addEventListener("click", () => ctl?.abort());
 
 function render() {
   $("#find").disabled = !sample || !state.file || busy;
   $("#stop").hidden = !busy;
   $("#note").hidden = !noClaude;
+  document.querySelectorAll("#team input").forEach(i => { i.disabled = !i.checked && state.team.length >= 3; });
   if (!DATA) return;
 
   const r = state.result?.lord === state.lord ? state.result : null;
@@ -318,12 +585,19 @@ function render() {
         <dl><dt>Nightlord</dt><dd>${lordName(r.lord)}</dd><dt>Shifting Earth</dt><dd>${TERRAINS[b.terrain]}</dd><dt>Spawn</dt><dd>${esc(b.spawn)}</dd></dl>
         ${r.reason ? `<p class="reason">${esc(r.reason)}</p>` : ""}
         ${r.confidence === "low" ? `<p class="reason">Compare it with the patterns below before you trust it.</p>` : ""}
-        <a class="btn" href="${url(b)}" target="_blank" rel="noopener">Open the full map ↗</a>
+        <div class="actions">
+          <a class="btn" href="${url(b)}" target="_blank" rel="noopener">Open the full map ↗</a>
+          <button type="button" id="plan"${!sample || busy || !state.team.length ? " disabled" : ""}>${state.team.length ? "Plan route for my team" : "Pick your team to plan a route"}</button>
+        </div>
       </div>
       <figure class="yours"><img src="${shotURL}" alt="Your map screenshot"><figcaption>Your screenshot</figcaption></figure>
     </div>
     ${r.close.length ? `<div class="also"><p class="eyebrow">Also close</p><div class="grid">${r.close.map(p => tile(p, "close")).join("")}</div></div>` : ""}`;
   }
+
+  const rt = r && state.route?.lord === r.lord && state.route.pid === r.best.id ? state.route : null;
+  $("#route").hidden = !rt;
+  if (rt) $("#route").innerHTML = routeHTML(rt);
 
   const all = rows(state.lord);
   const t = state.terrain !== "auto" ? state.terrain : state.detected;
