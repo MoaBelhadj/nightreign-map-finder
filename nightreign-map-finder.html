@@ -1,3 +1,5 @@
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Nightreign Map Finder</title>
 <meta name="claude:viewport-fit-sides" content="cover">
 <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -25,6 +27,7 @@ body {
 header { padding-block: 40px 28px; }
 h1 { font: 400 clamp(30px, 5vw, 46px)/1.1 var(--display); letter-spacing: .04em; color: var(--gold); margin: 0; text-wrap: balance; }
 .lede { color: var(--muted); max-width: 62ch; margin: 10px 0 0; }
+.lede a { color: var(--tide); }
 .eyebrow, legend, .group h3 { font: 500 13px/1.2 var(--body); letter-spacing: .12em; text-transform: uppercase; color: var(--muted); }
 
 .controls { display: grid; grid-template-columns: minmax(0, 1.3fr) minmax(0, 1fr); gap: 28px; align-items: start; }
@@ -145,12 +148,75 @@ footer { margin-top: 48px; padding-top: 16px; border-top: 1px solid var(--line);
 footer p { margin: 0 0 6px; max-width: 80ch; }
 footer a { color: var(--tide); }
 @media (prefers-reduced-motion: no-preference) { .tile, .chip span { transition: border-color .15s; } }
+
+/* Live companion: controls on the left, the overlay (which can move into its own pop-out window) on the right. */
+.live { margin-top: 44px; }
+.live h2 { font: 400 26px/1.2 var(--display); margin: 0; }
+.live-grid { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 420px); gap: 28px; margin-top: 18px; align-items: start; }
+@media (max-width: 900px) { .live-grid { grid-template-columns: minmax(0, 1fr); } .live-right { order: -1; } }
+.live-right { display: grid; gap: 12px; min-width: 0; }
+.lv fieldset { margin-bottom: 22px; }
+.lv-row { display: flex; flex-wrap: wrap; gap: 8px; align-items: center; }
+.lv button { background: transparent; color: var(--ink); border-color: var(--line); padding: 8px 14px; }
+.lv button.primary { background: var(--gold); color: var(--gold-ink); border-color: var(--gold); }
+.lv button[aria-pressed="true"] { background: var(--raised); border-color: var(--gold); }
+.lv button:disabled { opacity: .45; cursor: not-allowed; }
+.lv select, .lv input[type="text"] { font: inherit; font-size: 15px; color: var(--ink); background: var(--panel); border: 1px solid var(--line); border-radius: 6px; padding: 6px 10px; min-width: 0; }
+.lv input[type="range"], .lv input[type="checkbox"] { accent-color: var(--gold); }
+.lv-set { display: grid; grid-template-columns: repeat(auto-fill, minmax(180px, 1fr)); gap: 12px 16px; margin: 12px 0; }
+.field { display: grid; gap: 4px; font-size: 14px; color: var(--muted); }
+.field.check { display: flex; gap: 8px; align-items: center; color: var(--ink); }
+.field.inline { display: flex; gap: 6px; align-items: center; }
+.lv-route-row { margin-top: 4px; }
+.lv-gap { margin-top: 18px; }
+#lv-q { flex: 1 1 180px; }
+#lv-status { margin: 10px 0 0; color: var(--muted); min-height: 1.5em; }
+#lv-status.err, #lv-answer .err { color: var(--bad); }
+#lv-answer .warn { color: var(--warn); }
+#lv-answer .q { color: var(--muted); margin: 0 0 4px; }
+#lv-answer p, #lv-answer ul { margin: 0 0 8px; }
+#lv-readings dd .dim, .dim { color: var(--muted); }
+.drop.small { min-height: 96px; margin-top: 12px; }
+details.lv-more { border-top: 1px solid var(--line); padding: 12px 0; }
+details.lv-more summary { cursor: pointer; font-weight: 500; }
+#lv-preview { display: block; width: 100%; height: auto; margin-top: 12px; border: 1px solid var(--line); border-radius: 8px; cursor: crosshair; touch-action: none; }
+#lv-preview[hidden] { display: none; }
+
+.hud { --hud-alpha: .92; background: rgb(17 14 27 / var(--hud-alpha)); color: var(--ink); border: 1px solid var(--line); border-radius: 10px; padding: 10px 12px; font: 16px/1.3 var(--body); min-width: 0; }
+.hud[data-size="s"] { font-size: 13px; }
+.hud[data-size="l"] { font-size: 21px; }
+.hud-status { display: flex; flex-wrap: wrap; gap: 4px 10px; align-items: center; font-weight: 700; font-size: .8em; letter-spacing: .06em; text-transform: uppercase; }
+.hud-mode { color: var(--muted); font-weight: 500; letter-spacing: 0; text-transform: none; }
+.hud .dot { width: .7em; height: .7em; border-radius: 50%; background: var(--muted); }
+.hud[data-status="live"] .dot { background: var(--good); }
+.hud[data-status="paused"] .dot, .hud[data-status="starting"] .dot { background: var(--warn); }
+.hud[data-status="stale"] .dot, .hud[data-status="unsure"] .dot, .hud[data-status="lost"] .dot { background: var(--bad); }
+.hud[data-status="stale"] .hud-meta, .hud[data-status="unsure"] .hud-meta, .hud[data-status="lost"] .hud-meta { color: var(--bad); }
+.hud-meta { color: var(--muted); font-size: .75em; margin-top: 2px; }
+.hud-read { display: flex; flex-wrap: wrap; gap: 2px 12px; margin: 6px 0 8px; font-size: .85em; font-variant-numeric: tabular-nums; }
+.hud-read .dim { color: var(--muted); opacity: .7; }
+.hud-tips { list-style: none; margin: 0; padding: 0; display: grid; gap: 8px; }
+.tip { border-left: 4px solid var(--tide); padding: 1px 0 1px 9px; }
+.tip.warn { border-color: var(--warn); }
+.tip.urgent { border-color: var(--bad); }
+.tip.none { border-color: var(--line); }
+.tip b { display: block; font-size: 1.2em; line-height: 1.2; }
+.tip.urgent b { color: var(--bad); }
+.tip small { display: block; color: var(--muted); font-size: .72em; margin-top: 2px; }
+.hud.float { position: fixed; z-index: 50; width: min(380px, calc(100vw - 32px)); }
+.hud.float[data-corner="tl"] { top: 16px; left: 16px; }
+.hud.float[data-corner="tr"] { top: 16px; right: 16px; }
+.hud.float[data-corner="bl"] { bottom: 16px; left: 16px; }
+.hud.float[data-corner="br"] { bottom: 16px; right: 16px; }
+.hud:fullscreen { font-size: 34px; padding: 40px 48px; border-radius: 0; }
+body.pip { margin: 0; padding: 0; background: var(--night); }
+body.pip .hud { border: 0; border-radius: 0; min-height: 100vh; box-sizing: border-box; }
 </style>
 
 <div class="wrap">
   <header>
     <h1>Nightreign Map Finder</h1>
-    <p class="lede">Screenshot your map at the start of an expedition and drop it here. Claude matches it against all 520 map patterns, links you to the full annotated map, and plans a route for your team.</p>
+    <p class="lede">Screenshot your map at the start of an expedition and drop it here. Claude matches it against all 520 map patterns, links you to the full annotated map, and plans a route for your team. During the run, the <a href="#live">Live companion</a> reads your HUD and gives short tips.</p>
   </header>
 
   <div class="controls">
@@ -177,6 +243,115 @@ footer a { color: var(--tide); }
   <section id="result" hidden aria-live="polite"></section>
   <section id="route" hidden aria-live="polite"></section>
 
+  <section class="live lv" id="live" aria-labelledby="live-title">
+    <h2 id="live-title">Live companion</h2>
+    <p class="sub">Share your game window and get short tips while you play. Your HUD bars are read on this device, many times a second. Nothing is recorded or saved, and Claude only sees a frame when you ask.</p>
+    <div class="live-grid">
+      <div class="live-left">
+        <fieldset>
+          <legend>Input</legend>
+          <div class="lv-row">
+            <button type="button" class="primary" id="lv-screen">Share game window</button>
+            <button type="button" id="lv-card">Capture card</button>
+            <select id="lv-cards" aria-label="Capture device" hidden></select>
+            <button type="button" id="lv-sim">Try a simulated HUD</button>
+            <button type="button" id="lv-stop" hidden>Stop capture</button>
+          </div>
+          <p class="fine">Your browser asks before anything is shared. Pick the Nightreign window, not the whole screen, so the overlay is never part of what gets read.</p>
+          <label class="drop small" id="lv-drop" for="lv-file">
+            <input type="file" id="lv-file" accept="image/*">
+            <span><strong>Drop or choose a gameplay screenshot</strong><br>Or click anywhere in this section and paste. Its bars are read, and you can ask about it.</span>
+          </label>
+          <p id="lv-status" role="status" aria-live="polite"></p>
+        </fieldset>
+
+        <fieldset>
+          <legend>Controls</legend>
+          <div class="lv-row">
+            <button type="button" id="lv-pause" aria-pressed="false">Pause</button>
+            <button type="button" id="lv-mute" aria-pressed="false">Mute</button>
+            <button type="button" id="lv-pop" aria-pressed="false">Pop out over game</button>
+            <button type="button" id="lv-full">Full screen</button>
+          </div>
+          <div class="lv-set">
+            <label class="field">Mode<select id="lv-mode" data-set="mode"><option value="auto">Auto</option><option value="combat">Combat</option><option value="explore">Exploration</option></select></label>
+            <label class="field">Phase<select id="lv-phase"></select></label>
+            <label class="field">You play<select id="lv-me" data-set="me"></select></label>
+            <label class="field check"><input type="checkbox" id="lv-spoilers" data-set="spoilers"> Spoilers: boss names and weaknesses</label>
+          </div>
+          <div class="lv-row lv-route-row">
+            <button type="button" id="lv-prev">Previous stop</button>
+            <button type="button" id="lv-next">Next stop</button>
+            <span class="fine" id="lv-route"></span>
+          </div>
+          <p class="fine">Hotkeys work while this page or the pop-out has focus: P pause, M mute, 1 auto, 2 combat, 3 exploration, N next stop (Shift+N back), D next phase, Q ask about now, V voice, O pop-out, S spoilers. While the game has focus, use voice instead.</p>
+        </fieldset>
+
+        <fieldset>
+          <legend>Readings</legend>
+          <dl id="lv-readings"></dl>
+        </fieldset>
+
+        <details class="lv-more">
+          <summary>Overlay and performance</summary>
+          <div class="lv-set">
+            <label class="field">Analysis rate <span id="lv-fps-out"></span><input type="range" min="2" max="30" step="1" data-set="fps"></label>
+            <label class="field">Size<select data-set="size"><option value="s">Small</option><option value="m">Medium</option><option value="l">Large</option></select></label>
+            <label class="field">Opacity <span id="lv-opacity-out"></span><input type="range" min="0.3" max="1" step="0.05" data-set="opacity"></label>
+            <label class="field">Placement in this page<select data-set="place"><option value="dock">Docked</option><option value="float">Floating</option></select></label>
+            <label class="field">Floating corner<select data-set="corner"><option value="tl">Top left</option><option value="tr">Top right</option><option value="bl">Bottom left</option><option value="br">Bottom right</option></select></label>
+            <label class="field">Minimum gap between tips <span id="lv-gap-out"></span><input type="range" min="0" max="20" step="1" data-set="gap"></label>
+            <label class="field">Sound for urgent tips<select data-set="sound"><option value="beep">Beep</option><option value="voice">Spoken</option><option value="off">Off</option></select></label>
+            <label class="field">Volume<input type="range" min="0" max="1" step="0.05" data-set="volume"></label>
+            <label class="field">Claude answers<select data-set="depth"><option value="quick">Fast</option><option value="default">Thorough (slower)</option></select></label>
+          </div>
+          <p class="fine">Opacity and floating placement apply inside this page. The pop-out is a separate always-on-top window: drag it where you want it. The browser keeps it opaque.</p>
+        </details>
+
+        <details class="lv-more">
+          <summary>Calibrate HUD</summary>
+          <p class="fine">With the HUD showing and full HP, press Find bars. Boxes appear on the preview. To fix one, pick it below and drag a box around the full bar.</p>
+          <div class="lv-row">
+            <button type="button" id="lv-find">Find bars</button>
+            <button type="button" id="lv-snap">Refresh preview</button>
+            <label class="field inline">Draw<select id="lv-bar"><option value="hp">HP</option><option value="fp">FP</option><option value="sta">Stamina</option><option value="boss">Boss bar</option></select></label>
+            <button type="button" id="lv-clear">Clear calibration</button>
+          </div>
+          <canvas id="lv-preview" hidden></canvas>
+          <p class="eyebrow lv-gap">Corrections</p>
+          <div class="lv-set">
+            <label class="field check"><input type="checkbox" data-ignore="hp"> Ignore HP reading</label>
+            <label class="field check"><input type="checkbox" data-ignore="fp"> Ignore FP reading</label>
+            <label class="field check"><input type="checkbox" data-ignore="sta"> Ignore stamina reading</label>
+            <label class="field check"><input type="checkbox" data-ignore="bossHp"> Ignore boss reading</label>
+            <label class="field">Boss name for this fight<input type="text" id="lv-boss" autocomplete="off" placeholder="Overrides what Claude reads"></label>
+          </div>
+        </details>
+      </div>
+
+      <div class="live-right">
+        <div id="hud-home">
+          <div id="hud" class="hud" data-status="off" aria-live="polite">
+            <div class="hud-status"><span class="dot" aria-hidden="true"></span><span class="hud-state"></span><span class="hud-mode"></span></div>
+            <div class="hud-meta"></div>
+            <div class="hud-read"></div>
+            <ol class="hud-tips"></ol>
+          </div>
+        </div>
+        <form id="lv-ask" class="lv-row">
+          <input type="text" id="lv-q" autocomplete="off" placeholder="Ask: what should I do here?" aria-label="Your question">
+          <button type="submit">Ask</button>
+          <button type="button" id="lv-now">What now?</button>
+          <button type="button" id="lv-mic" aria-pressed="false">Voice</button>
+        </form>
+        <p class="fine">Voice uses your browser's speech service (Edge sends the audio to Microsoft) and only listens while Voice is on.</p>
+        <div id="lv-answer" aria-live="polite"></div>
+        <p class="fine" id="lv-lat"></p>
+        <button type="button" id="lv-copy">Copy latency report</button>
+      </div>
+    </div>
+  </section>
+
   <section class="patterns">
     <h2 id="grid-title">Map patterns</h2>
     <p class="sub" id="grid-sub">Loading patterns…</p>
@@ -187,6 +362,7 @@ footer a { color: var(--tide); }
     <p>Map patterns, thumbnails and full maps by thefifthmatt: <a href="https://thefifthmatt.github.io/nightreign/" target="_blank" rel="noopener">thefifthmatt.github.io/nightreign</a> (updated for app ver 1.03.2).</p>
     <p>Route data for patterns 000–319 comes from thefifthmatt's pattern spreadsheet (game version 1.01.3). DLC and Depth of Night patterns (1000+) are planned from your screenshot alone.</p>
     <p>A pattern fixes the structures, bosses and Shifting Earth. The first circle, merchant shops and scarabs still vary per expedition.</p>
+    <p>The Live companion only reads pixels the game already shows you. It never touches the game, its memory or its files, and never presses anything for you.</p>
   </footer>
 </div>
 
@@ -252,7 +428,7 @@ $("#file").addEventListener("change", e => setFile(e.target.files[0]));
 drop.addEventListener("dragover", e => { e.preventDefault(); drop.classList.add("over"); });
 drop.addEventListener("dragleave", () => drop.classList.remove("over"));
 drop.addEventListener("drop", e => { e.preventDefault(); drop.classList.remove("over"); setFile(e.dataTransfer.files[0]); });
-document.addEventListener("paste", e => { const f = [...(e.clipboardData?.files || [])].find(f => f.type.startsWith("image/")); if (f) setFile(f); });
+document.addEventListener("paste", e => { if (document.activeElement?.closest?.("#live")) return; const f =[...(e.clipboardData?.files || [])].find(f => f.type.startsWith("image/")); if (f) setFile(f); });
 
 function status(text, err) { $("#status").textContent = text; $("#status").classList.toggle("err", !!err); }
 
@@ -621,3 +797,5 @@ fetch("patterns.json").then(r => r.json()).then(d => { DATA = d; render(); })
   render();
 })();
 </script>
+<script src="live-core.js"></script>
+<script src="live.js"></script>

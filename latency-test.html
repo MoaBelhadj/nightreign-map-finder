@@ -1,0 +1,33 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Latency test</title>
+<style>
+html, body { margin: 0; height: 100%; background: #020203; color: #ece5d3; font: 16px/1.5 "Segoe UI", system-ui, sans-serif; }
+canvas { display: block; width: 100vw; height: 100vh; }
+p { position: fixed; left: 16px; right: 16px; bottom: 16px; margin: 0; max-width: 70ch; }
+</style>
+</head>
+<body>
+<canvas id="c"></canvas>
+<p>Latency test. In the Live companion, press Share game window and pick this window, then Find bars. The HP bar flips every 1.2 s and the companion reports how long each flip took to reach its overlay.</p>
+<script src="live-core.js"></script>
+<script>
+// A fake HUD whose HP flips on a timer. Each flip's time goes to the companion over a BroadcastChannel (same machine, same clock).
+const c = document.getElementById("c"), g = c.getContext("2d"), bc = new BroadcastChannel("nmf-latency");
+const s = { hp: 1, fp: 0.8, sta: 1, boss: null, scene: 0 };
+let flipAt = 0;
+function frame(t) {
+  if (c.width !== innerWidth || c.height !== innerHeight) { c.width = innerWidth; c.height = innerHeight; }
+  const flip = t - flipAt > 1200;
+  if (flip) { flipAt = t; s.hp = s.hp === 1 ? 0.25 : 1; }
+  LiveCore.drawSim(g, c.width, c.height, s);
+  if (flip) bc.postMessage({ hp: s.hp, t: performance.timeOrigin + performance.now() });
+  requestAnimationFrame(frame);
+}
+requestAnimationFrame(frame);
+</script>
+</body>
+</html>
