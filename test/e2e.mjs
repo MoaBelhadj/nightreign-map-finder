@@ -11,7 +11,7 @@ const EDGE = process.env.EDGE || "C:/Program Files (x86)/Microsoft/Edge/Applicat
 const PORT = 8799, DBG = 9339, base = `http://127.0.0.1:${PORT}`, shotPath = process.argv[2];
 const sleep = ms => new Promise(r => setTimeout(r, ms));
 
-const server = spawn("py", ["-m", "http.server", String(PORT), "--bind", "127.0.0.1"], { cwd: root, stdio: "ignore" });
+const server = spawn("py", ["serve.py", String(PORT)], { cwd: root, stdio: "ignore" });
 const edge = spawn(EDGE, ["--headless=new", `--remote-debugging-port=${DBG}`, `--user-data-dir=${join(process.env.E2E_PROFILE || tmpdir(), "nmf-e2e-profile")}`,
   "--no-first-run", "--autoplay-policy=no-user-gesture-required", "--auto-select-tab-capture-source-by-title=Latency test", "about:blank"], { stdio: "ignore" });
 const cleanup = () => { for (const p of [edge, server]) try { execSync(`taskkill /pid ${p.pid} /T /F`, { stdio: "ignore" }); } catch {} };
@@ -51,6 +51,8 @@ const coachMock = `(() => {
 try {
   const page = await open("about:blank");
   await page.send("Page.enable");
+  await page.send("Network.enable");
+  await page.send("Network.setCacheDisabled", { cacheDisabled: true }); // the profile is reused between runs; always test the files on disk
   await page.send("Emulation.setDeviceMetricsOverride", { width: 1280, height: 900, deviceScaleFactor: 1, mobile: false });
   await page.send("Page.addScriptToEvaluateOnNewDocument", { source: oldMock + "\n" + coachMock });
   const errors = [];
@@ -62,7 +64,9 @@ try {
   await page.send("Page.navigate", { url: `${base}/nightreign-map-finder.html` });
   await sleep(2000);
   await page.evaluate(readFileSync(join(root, "test/e2e-driver.js"), "utf8"));
-  const out = { regress: await page.evaluate("__regress()") };
+  const out = { framed: await page.evaluate("__framed()") };
+  if (process.env.ONLY_FRAMED) { console.log(JSON.stringify(out, null, 2)); cleanup(); process.exit(0); }
+  out.regress = await page.evaluate("__regress()");
   out.live = await page.evaluate("__e2e()");
   out.pip = await page.evaluate("__pip()", true).catch(e => ({ error: String(e) }));
   // The latency page gets its own window so both pages keep painting; then the main window is minimized, as it would be behind the game.
@@ -92,5 +96,6 @@ try {
   }
   out.consoleErrors = errors;
   console.log(JSON.stringify(out, null, 2));
-  process.exitCode = out.live.failed ? 1 : 0;
+  const f = out.framed;
+  process.exitCode = out.live.failed || !(f.shareDisabled && f.help && f.mentionsCmd && f.link) ? 1 : 0;
 } finally { cleanup(); }

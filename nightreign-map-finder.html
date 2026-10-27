@@ -177,6 +177,10 @@ footer a { color: var(--tide); }
 #lv-answer p, #lv-answer ul { margin: 0 0 8px; }
 #lv-readings dd .dim, .dim { color: var(--muted); }
 .drop.small { min-height: 96px; margin-top: 12px; }
+.lv-local { margin-top: 12px; padding: 12px 14px; border: 1px solid var(--warn); border-radius: 8px; background: var(--raised); font-size: 15px; }
+.lv-local p, .lv-local ol { margin: 0 0 6px; }
+.lv-local ol { padding-left: 20px; }
+.lv-local a { color: var(--tide); }
 details.lv-more { border-top: 1px solid var(--line); padding: 12px 0; }
 details.lv-more summary { cursor: pointer; font-weight: 500; }
 #lv-preview { display: block; width: 100%; height: auto; margin-top: 12px; border: 1px solid var(--line); border-radius: 8px; cursor: crosshair; touch-action: none; }
@@ -258,6 +262,14 @@ body.pip .hud { border: 0; border-radius: 0; min-height: 100vh; box-sizing: bord
             <button type="button" id="lv-stop" hidden>Stop capture</button>
           </div>
           <p class="fine">Your browser asks before anything is shared. Pick the Nightreign window, not the whole screen, so the overlay is never part of what gets read.</p>
+          <div class="lv-local" id="lv-local" hidden>
+            <p><strong>Live capture runs in the local copy of this page.</strong> claude.ai doesn't let pages share your screen or open the pop-out. Screenshots and questions still work here.</p>
+            <ol>
+              <li>Open your <b>nightreign-map-finder</b> folder (or get it from <a href="https://github.com/MoaBelhadj/nightreign-map-finder/tree/feature/live-companion" target="_blank" rel="noopener">GitHub</a>) and double-click <b>start-live.cmd</b>. It needs Python.</li>
+              <li>Edge opens the Live companion. If it doesn't, <a href="http://localhost:8787/nightreign-map-finder.html#live" target="_blank" rel="noopener">open the local copy</a> while start-live.cmd is running.</li>
+              <li>Press <b>Share game window</b> and pick <b>ELDEN RING NIGHTREIGN</b>.</li>
+            </ol>
+          </div>
           <label class="drop small" id="lv-drop" for="lv-file">
             <input type="file" id="lv-file" accept="image/*">
             <span><strong>Drop or choose a gameplay screenshot</strong><br>Or click anywhere in this section and paste. Its bars are read, and you can ask about it.</span>

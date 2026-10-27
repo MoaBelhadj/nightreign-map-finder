@@ -139,6 +139,20 @@ window.__e2e = async () => {
   return R;
 };
 
+// Inside a frame that forbids screen capture (as claude.ai's does): the page must say how to get live capture, not just that it's blocked.
+window.__framed = async () => {
+  const f = Object.assign(document.createElement("iframe"), { src: "nightreign-map-finder.html", allow: "display-capture 'none'" });
+  f.style.cssText = "width:1200px;height:800px";
+  document.body.append(f);
+  await new Promise(r => f.addEventListener("load", r, { once: true }));
+  await sleep(1500);
+  const d = f.contentDocument, local = d.querySelector("#lv-local"), link = local?.querySelector('a[href^="http://localhost"]');
+  const out = { shareDisabled: d.querySelector("#lv-screen").disabled, status: d.querySelector("#lv-status").textContent,
+    help: !!local && !local.hidden, mentionsCmd: /start-live\.cmd/.test(local?.textContent || ""), link: link?.getAttribute("href") || null };
+  f.remove();
+  return out;
+};
+
 // The always-on-top pop-out: the overlay moves into its own window and comes back when it closes.
 window.__pip = async () => {
   const b = document.querySelector("#lv-pop"), out = { supported: "documentPictureInPicture" in window };

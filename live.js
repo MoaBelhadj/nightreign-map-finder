@@ -51,7 +51,7 @@ async function connect(kind, deviceId) {
 function captureError(e) {
   const msg = String(e?.message || "");
   if (e?.name === "NotSupportedError" || e?.name === "TypeError") return "This browser can't capture here. Use Edge or Chrome with the local copy.";
-  if (e?.name === "NotAllowedError" && /policy|context/i.test(msg)) return "Screen capture is blocked inside this frame. Open the local copy for live capture; screenshots and questions still work here.";
+  if (e?.name === "NotAllowedError" && /policy|context/i.test(msg)) { $("#lv-local").hidden = false; return "Screen sharing is blocked on this page. Follow the steps under the buttons to use the local copy."; }
   if (e?.name === "NotAllowedError") return "Sharing was cancelled or blocked. Press the button again and pick the game window.";
   if (e?.name === "NotFoundError") return "No capture device found.";
   if (e?.name === "NotReadableError") return "That device is busy in another app.";
@@ -320,7 +320,7 @@ let framed = true;
 try { framed = window.top !== window; } catch {}
 async function popOut() {
   if (pip) return pip.close();
-  if (!window.documentPictureInPicture || framed) return note(framed ? "The pop-out can't open inside claude.ai's frame. Use the local copy for the over-game overlay, or full screen on your second monitor." : "The pop-out needs Edge or Chrome 116 or newer. Use full screen on your second monitor instead.", true);
+  if (!window.documentPictureInPicture || framed) return note(framed ? "The pop-out can't open on this page. Use the local copy (steps under the Input buttons), or full screen on your second monitor." : "The pop-out needs Edge or Chrome 116 or newer. Use full screen on your second monitor instead.", true);
   try { pip = await documentPictureInPicture.requestWindow({ width: SIZES[S.size][0], height: SIZES[S.size][1] }); }
   catch { return note("The pop-out window couldn't open. Use full screen on your second monitor instead.", true); }
   document.querySelectorAll("style, link[rel=stylesheet]").forEach(n => pip.document.head.append(n.cloneNode(true)));
@@ -569,11 +569,13 @@ $("#lv-ask").addEventListener("submit", e => { e.preventDefault(); ask($("#lv-q"
 document.querySelectorAll("#live [data-ignore]").forEach(el => el.addEventListener("change", () => { L.block(store, el.dataset.ignore, "screen", el.checked); tick(); }));
 $("#lv-boss").addEventListener("change", e => { const v = e.target.value.trim(); if (v) L.observe(store, "bossName", "manual", v, 1, now(), Infinity); else L.forget(store, "bossName", "manual"); tick(); });
 
+// claude.ai's frame refuses screen sharing and the pop-out, so there the page shows how to open the local copy instead.
 const policy = document.permissionsPolicy || document.featurePolicy;
 if (policy?.allowsFeature && !policy.allowsFeature("display-capture")) {
   $("#lv-screen").disabled = true;
-  note("Screen capture is blocked inside this frame. Open the local copy for live capture (see Setup below). Screenshots and questions still work here.");
+  note("Screen sharing is blocked on this page. Follow the steps under the buttons to use the local copy.");
 }
+if (framed || $("#lv-screen").disabled) $("#lv-local").hidden = false;
 setInterval(tick, 500); // keeps ages and status current when no capture is sending readings
 apply();
 tick();
