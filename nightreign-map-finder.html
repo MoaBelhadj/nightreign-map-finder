@@ -1,5 +1,5 @@
 <meta charset="utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>Nightreign Map Finder</title>
 <meta name="claude:viewport-fit-sides" content="cover">
 <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -204,10 +204,10 @@ details.lv-more summary { cursor: pointer; font-weight: 500; }
 .tip.urgent b { color: var(--bad); }
 .tip small { display: block; color: var(--muted); font-size: .72em; margin-top: 2px; }
 .hud.float { position: fixed; z-index: 50; width: min(380px, calc(100vw - 32px)); }
-.hud.float[data-corner="tl"] { top: 16px; left: 16px; }
-.hud.float[data-corner="tr"] { top: 16px; right: 16px; }
-.hud.float[data-corner="bl"] { bottom: 16px; left: 16px; }
-.hud.float[data-corner="br"] { bottom: 16px; right: 16px; }
+.hud.float[data-corner="tl"] { top: calc(16px + env(safe-area-inset-top, 0px)); left: calc(16px + env(safe-area-inset-left, 0px)); }
+.hud.float[data-corner="tr"] { top: calc(16px + env(safe-area-inset-top, 0px)); right: calc(16px + env(safe-area-inset-right, 0px)); }
+.hud.float[data-corner="bl"] { bottom: calc(16px + env(safe-area-inset-bottom, 0px)); left: calc(16px + env(safe-area-inset-left, 0px)); }
+.hud.float[data-corner="br"] { bottom: calc(16px + env(safe-area-inset-bottom, 0px)); right: calc(16px + env(safe-area-inset-right, 0px)); }
 .hud:fullscreen { font-size: 34px; padding: 40px 48px; border-radius: 0; }
 body.pip { margin: 0; padding: 0; background: var(--night); }
 body.pip .hud { border: 0; border-radius: 0; min-height: 100vh; box-sizing: border-box; }
